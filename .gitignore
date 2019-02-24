@@ -3,3 +3,4 @@ config.py
 __pycache__
 token.pickle
 credentials.json
+logs

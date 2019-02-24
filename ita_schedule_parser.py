@@ -12,21 +12,6 @@ def get_info_from_ita_source(soup: BeautifulSoup):
     return handle_schedule(schedule)
 
 
-def get_week_ids(soup: BeautifulSoup):
-    try:
-        fonts = str(soup.find_all("font", attrs={"color": "#ff00ff"})).split('-я')
-    except Exception as ex:
-        print(ex)
-
-    numbers = set()
-    for font in fonts:
-        if font == fonts[-1]:
-            break
-        numbers.add(str(font)[-2:].lstrip())
-
-    return sorted(numbers)
-
-
 def get_schedule_per_day(soup: BeautifulSoup):
     schedule_per_day = []
 
@@ -80,13 +65,19 @@ def sepate_day_on_classes(day: dict):
             continue
         else:
             classes.append({
+                'kind': 'calendar#event',
                 'summary': day[item],
                 'start': handle_start_time(day, item),
                 'end': handle_end_time(day, item),
                 'colorId': config.EVENTS_COLOR,
                 'transparency': config.TRANSPARENCY,
                 'visibility': config.VISIBILITY,
-                'reminders.overrides[].minutes': config.REMINDER_MINUTES_BEFORE,
+                'reminders': {
+                    'useDefault': False,
+                    'overrides': [
+                        {'method': config.REMINDER_TYPE, 'minutes': config.REMINDER_MINUTES_BEFORE},
+                    ],
+                },
             })
 
     return classes

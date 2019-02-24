@@ -31,3 +31,6 @@ VISIBILITY = "public"
 
 # Количество минут до пары для напоминания. min = 0, max = 40320 (4 недели)
 REMINDER_MINUTES_BEFORE = 15
+
+# Либо "popup" либо "email"
+REMINDER_TYPE = "popup"
