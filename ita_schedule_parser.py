@@ -23,6 +23,7 @@ def get_week_ids(soup: BeautifulSoup):
         if font == fonts[-1]:
             break
         numbers.add(str(font)[-2:].lstrip())
+
     return sorted(numbers)
 
 
@@ -60,6 +61,7 @@ def handle_schedule(schedule: list):
         else:
             day['date'] = handle_date(day)
             result.append(sepate_day_on_classes(day))
+
     return result
 
 
@@ -82,7 +84,11 @@ def sepate_day_on_classes(day: dict):
                 'start': handle_start_time(day, item),
                 'end': handle_end_time(day, item),
                 'colorId': config.EVENTS_COLOR,
+                'transparency': config.TRANSPARENCY,
+                'visibility': config.VISIBILITY,
+                'reminders.overrides[].minutes': config.REMINDER_MINUTES_BEFORE,
             })
+
     return classes
 
 
@@ -90,6 +96,7 @@ def handle_start_time(day: dict, class_number: int):
     start_time = datetime_constants.CLASS_TIME['start'][str(class_number)]
     hours = int(start_time.split(':')[0])
     minutes = int(start_time.split(':')[1])
+
     return {
         'dateTime': day['date'].replace(hour=hours, minute=minutes, tzinfo=pytz.timezone(config.TIMEZONE)).strftime("%Y-%m-%dT%H:%M:%S"),
         'timeZone': config.TIMEZONE
@@ -100,6 +107,7 @@ def handle_end_time(day: dict, class_number: int):
     start_time = datetime_constants.CLASS_TIME['end'][str(class_number)]
     hours = int(start_time.split(':')[0])
     minutes = int(start_time.split(':')[1])
+
     return {
         'dateTime': day['date'].replace(hour=hours, minute=minutes, tzinfo=pytz.timezone(config.TIMEZONE)).strftime("%Y-%m-%dT%H:%M:%S"),
         'timeZone': config.TIMEZONE
