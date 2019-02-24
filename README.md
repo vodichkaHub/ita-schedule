@@ -4,7 +4,7 @@
 ## Инструкция
 1. ### Установка Python
     Требование: >= Python 3.*
->https://www.python.org/downloads/
+    >https://www.python.org/downloads/
 
 2. ### Установка Anaconda
     Требование:  >= Anaconda3
