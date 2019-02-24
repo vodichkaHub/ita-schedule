@@ -1,2 +1,5 @@
 config.py
 .vscode
+__pycache__
+token.pickle
+credentials.json
