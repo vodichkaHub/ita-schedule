@@ -10,11 +10,12 @@ import config
 
 def get_google_service():
     creds = None
+    current_dir_name = os.path.dirname(os.path.realpath(__file__))
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
+    if os.path.exists(current_dir_name + '/token.pickle'):
+        with open(current_dir_name + '/token.pickle', 'rb') as token:
             creds = pickle.load(token)
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
@@ -22,19 +23,20 @@ def get_google_service():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', scopes=config.GOOGLE_SCOPES)
+                current_dir_name + '/credentials.json', scopes=config.GOOGLE_SCOPES)
             creds = flow.run_local_server()
         # Save the credentials for the next run
-        with open('token.pickle', 'wb') as token:
+        with open(current_dir_name + '/token.pickle', 'wb') as token:
             pickle.dump(creds, token)
 
     return build('calendar', 'v3', credentials=creds)
 
 
 def insert_events(service, schedule: list):
-    if not os.path.exists(os.path.dirname('./logs/')):
+    current_dir_name = os.path.dirname(os.path.realpath(__file__))
+    if not os.path.exists(os.path.dirname(current_dir_name + '/logs/')):
         try:
-            os.makedirs(os.path.dirname('./logs/'))
+            os.makedirs(os.path.dirname(current_dir_name + '/logs/'))
         except Exception as ex: # Guard against race condition
             raise
     for day in schedule:
@@ -92,5 +94,6 @@ def test(service):
 
 
 def log_message(message):
-    with open("./logs/main-log-" + str(datetime.datetime.now().strftime("%d-%m-%y")) + ".log", "a+") as log:
+    current_dir_name = os.path.dirname(os.path.realpath(__file__))
+    with open(current_dir_name + "/logs/main-log-" + str(datetime.datetime.now().strftime("%d-%m-%y")) + ".log", "a+") as log:
                 log.write(str(datetime.datetime.now().isoformat()) + message + "\n\n")
