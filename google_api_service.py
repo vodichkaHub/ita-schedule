@@ -62,6 +62,9 @@ def get_events(service):
 def clean_all_events_by_color_id(service):
     events = get_events(service)
     for event in events:
+        if not events:
+            log_message(' INFO ' + 'The calendar with id: ' + str(config.CALENDAR_ID) + ' has no events!\n\n')
+            break
         if event['colorId'] != config.EVENTS_COLOR:
             continue
         else:
