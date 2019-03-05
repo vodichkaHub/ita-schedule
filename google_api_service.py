@@ -54,10 +54,19 @@ def get_calendar_colors(service):
 
 def get_events(service):
     from_time = (datetime.datetime.now() - datetime.timedelta(weeks=1)).isoformat() + 'Z'
-    to_time = (datetime.datetime.now() + datetime.timedelta(weeks=5)).isoformat() + 'Z'
+    to_time = (datetime.datetime.now() + datetime.timedelta(weeks=25)).isoformat() + 'Z'
     events_result = service.events().list(calendarId=config.CALENDAR_ID, timeMin=from_time, timeMax=to_time, singleEvents=True, orderBy='startTime').execute()
 
     return events_result.get('items', [])
+
+def clean_all_events_by_color_id(service):
+    events = get_events(service)
+    for event in events:
+        if event['colorId'] != config.EVENTS_COLOR:
+            continue
+        else:
+            response = service.events().delete(calendarId=config.CALENDAR_ID, eventId=event['id']).execute()
+            log_message(' DELETING RESPONSE ' + str(response) + '\n\n')
 
 
 def find_and_replace_collisions(events_from_calendar: list, events_to_insert: list):
