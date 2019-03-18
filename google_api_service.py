@@ -54,8 +54,10 @@ def get_calendar_colors(service):
 
 def get_events(service):
     from_time = (datetime.datetime.now() - datetime.timedelta(weeks=1)).isoformat() + 'Z'
-    to_time = (datetime.datetime.now() + datetime.timedelta(weeks=25)).isoformat() + 'Z'
-    events_result = service.events().list(calendarId=config.CALENDAR_ID, timeMin=from_time, timeMax=to_time, singleEvents=True, orderBy='startTime').execute()
+    to_time = (datetime.datetime.now() + datetime.timedelta(weeks=15)).isoformat() + 'Z'
+    # from_time = (datetime.date(2019, 4, 11)).isoformat() + 'T22:24:25.959430Z'
+    # to_time = (datetime.date(2019, 5, 15)).isoformat() + 'T22:24:25.959430Z'
+    events_result = service.events().list(calendarId=config.CALENDAR_ID, timeMin=from_time, timeMax=to_time, singleEvents=True, orderBy='startTime', maxResults=2000).execute()
 
     return events_result.get('items', [])
 
