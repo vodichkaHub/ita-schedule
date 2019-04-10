@@ -87,9 +87,12 @@ def find_and_replace_collisions(events_from_calendar: list, events_to_insert: li
 
 
 def event_already_exists(e_event: dict, i_event: dict):
-    return (e_event['end']['dateTime'] == i_event['end']['dateTime'] + '+03:00') \
-            & (e_event['start']['dateTime'] == i_event['start']['dateTime'] + '+03:00') \
-            & (e_event['summary'] == i_event['summary'])
+    if('dateTime' in e_event['end']):
+        return (e_event['end']['dateTime'] == i_event['end']['dateTime'] + '+03:00') \
+                & (e_event['start']['dateTime'] == i_event['start']['dateTime'] + '+03:00') \
+                & (e_event['summary'] == i_event['summary'])
+    else:
+        return 1 # response doesn't match
 
 
 def test(service):
