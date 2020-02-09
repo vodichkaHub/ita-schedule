@@ -41,7 +41,8 @@ def insert_events(service, schedule: list):
             raise
     for day in schedule:
         try:
-            res = service.events().insert(calendarId=config.CALENDAR_ID, body=day).execute()
+            for event in day:
+                res = service.events().insert(calendarId=config.CALENDAR_ID, body=event).execute()
             log_message('  INFO  ' + str(res))
         except Exception as ex:
             log_message('  ERROR  ' + str(ex))
